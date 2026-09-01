@@ -10,7 +10,7 @@ function calculateResult() {
     let dsa = Number(document.getElementById("computer").value);
 
     if (name === "" || roll === "") {
-        alert("Please enter student name and roll number.");
+        alert("Please Enter Student name and roll number.");
         return;
     }
 

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyboard Event</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body id="form">
+    <h1>Keyboard Event</h1>
+    <p>on key down</p>
+    <input type="text" onkeydown="document.getElementById('form').style.background=this.value">
+    <p>on key up</p>
+    <input type="text" onkeyup="document.getElementById('form').style.background=this.value">
+    <p>on key press</p>
+    <input type="text" onkeypress="document.getElementById('form').style.background=this.value">
+</body>
+
+</html>

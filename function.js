@@ -4,4 +4,4 @@ function multiply(a, b) {
 let a = Number(prompt("Enter first number:"));
 let b = Number(prompt("Enter second number:"));
 let result = multiply(a, b);
-document.write("Result = " + result);
+document.write("Multiply of two number is:  " + result);

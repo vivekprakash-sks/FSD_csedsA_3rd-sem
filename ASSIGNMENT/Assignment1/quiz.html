@@ -31,7 +31,19 @@
         
         h1 {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+        }
+        /* TIMER */
+        
+        .timer {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: red;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 2px solid red;
+            border-radius: 8px;
         }
         
         .question {
@@ -67,6 +79,7 @@
             border: none;
             border-radius: 6px;
             cursor: pointer;
+            margin-top: 15px;
         }
         
         button:hover {
@@ -93,6 +106,23 @@
         .wrong {
             color: red;
         }
+        /* Hide questions initially */
+        
+        .question {
+            display: none;
+        }
+        
+        .question.active {
+            display: block;
+        }
+        
+        #nextButton {
+            display: block;
+        }
+        
+        #submitButton {
+            display: none;
+        }
     </style>
 
 </head>
@@ -103,8 +133,14 @@
 
         <h1>Quiz 1</h1>
 
+        <!-- TIMER -->
+        <div class="timer">
+            Time Left: <span id="timer">30</span> seconds
+        </div>
+
+
         <!-- Question 1 -->
-        <div class="question">
+        <div class="question active">
 
             <h2>1. What does HTML stand for?</h2>
 
@@ -215,8 +251,14 @@
         </div>
 
 
+        <!-- Next Button -->
+        <button type="button" id="nextButton" onclick="nextQuestion()">
+            Next Question
+        </button>
+
+
         <!-- Submit Button -->
-        <button type="button" onclick="checkQuiz()">
+        <button type="button" id="submitButton" onclick="checkQuiz()">
             Submit Quiz
         </button>
 
@@ -240,82 +282,251 @@
 
 
     <script>
+        // =========================
+        // VARIABLES
+        // =========================
+
+        let currentQuestion = 0;
+
+        let questions = document.querySelectorAll(".question");
+
+        let time = 30;
+
+        let timer;
+
+        let quizSubmitted = false;
+
+
+        // =========================
+        // START TIMER
+        // =========================
+
+        function startTimer() {
+
+            clearInterval(timer);
+
+            time = 30;
+
+            document.getElementById("timer").innerHTML =
+                time + " seconds";
+
+            timer = setInterval(function() {
+
+                time--;
+
+                document.getElementById("timer").innerHTML =
+                    time + " seconds";
+
+
+                // Time Over
+                if (time <= 0) {
+
+                    clearInterval(timer);
+
+                    nextQuestion();
+
+                }
+
+            }, 1000);
+        }
+
+
+        // =========================
+        // NEXT QUESTION
+        // =========================
+
+        function nextQuestion() {
+
+            clearInterval(timer);
+
+            // Hide current question
+            questions[currentQuestion].classList.remove("active");
+
+            currentQuestion++;
+
+
+            // If questions are remaining
+            if (currentQuestion < questions.length) {
+
+                questions[currentQuestion].classList.add("active");
+
+                startTimer();
+
+            }
+
+            // Last question completed
+            else {
+
+                checkQuiz();
+
+            }
+
+            // Show submit button on last question
+            if (currentQuestion == questions.length - 1) {
+
+                document.getElementById("nextButton").style.display =
+                    "none";
+
+                document.getElementById("submitButton").style.display =
+                    "block";
+            }
+
+        }
+
+
+        // =========================
+        // CHECK QUIZ
+        // =========================
+
         function checkQuiz() {
 
+            if (quizSubmitted) {
+                return;
+            }
+
+            quizSubmitted = true;
+
+            clearInterval(timer);
+
             let score = 0;
+
             let correct = 0;
+
             let wrong = 0;
+
             let unattempted = 0;
 
+
             // Question 1
-            let q1 = document.querySelector('input[name="q1"]:checked');
+            let q1 =
+                document.querySelector('input[name="q1"]:checked');
 
             if (q1 == null) {
+
                 unattempted++;
+
             } else if (q1.value == "correct") {
+
                 score++;
                 correct++;
+
             } else {
+
                 wrong++;
+
             }
 
 
             // Question 2
-            let q2 = document.querySelector('input[name="q2"]:checked');
+            let q2 =
+                document.querySelector('input[name="q2"]:checked');
 
             if (q2 == null) {
+
                 unattempted++;
+
             } else if (q2.value == "correct") {
+
                 score++;
                 correct++;
+
             } else {
+
                 wrong++;
+
             }
 
 
             // Question 3
-            let q3 = document.querySelector('input[name="q3"]:checked');
+            let q3 =
+                document.querySelector('input[name="q3"]:checked');
 
             if (q3 == null) {
+
                 unattempted++;
+
             } else if (q3.value == "correct") {
+
                 score++;
                 correct++;
+
             } else {
+
                 wrong++;
+
             }
 
 
             // Question 4
-            let q4 = document.querySelector('input[name="q4"]:checked');
+            let q4 =
+                document.querySelector('input[name="q4"]:checked');
 
             if (q4 == null) {
+
                 unattempted++;
+
             } else if (q4.value == "correct") {
+
                 score++;
                 correct++;
+
             } else {
+
                 wrong++;
+
             }
 
 
-            // Display Result
-            document.getElementById("result").style.display = "block";
+            // Hide questions
+            questions.forEach(function(question) {
+
+                question.style.display = "none";
+
+            });
+
+
+            // Hide buttons
+            document.getElementById("nextButton").style.display =
+                "none";
+
+            document.getElementById("submitButton").style.display =
+                "none";
+
+
+            // Hide timer
+            document.querySelector(".timer").style.display =
+                "none";
+
+
+            // Show result
+            document.getElementById("result").style.display =
+                "block";
+
 
             document.getElementById("marks").innerHTML =
                 "Your Score: <strong>" + score + " / 4</strong>";
 
+
             document.getElementById("correctAnswers").innerHTML =
                 "Correct Answers: " + correct;
+
 
             document.getElementById("wrongAnswers").innerHTML =
                 "Wrong Answers: " + wrong;
 
+
             document.getElementById("unattempted").innerHTML =
                 "Unattempted Questions: " + unattempted;
+
         }
+
+
+
+
+        startTimer();
     </script>
 
 </body>
 
 </html>
+```
